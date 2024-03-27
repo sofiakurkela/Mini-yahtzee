@@ -16,7 +16,7 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 let board = [];
 
-export default Gameboard = ({ navigation, route }) => {
+export default function Gameboard ({ navigation, route }) {
 
     const [playerName, setPlayerName] = useState('');
     const [nbrOfThrowsLeft, setNbrOfThrowsLeft] = useState(NBR_OF_THROWS);
@@ -78,15 +78,16 @@ export default Gameboard = ({ navigation, route }) => {
 
   // call the function for calculating points inside text component
   // for replacing zero
+
 const pointsRow = [];
 for (let spot = 0; spot < MAX_SPOT; spot++) {
   pointsRow.push(
     <Col key={"pointsRow" + spot}>
-      <Text key={"pointsRow" + spot}>{getSpotTotal(spot)}
+      <Text key={"pointsRow" + spot}>{getSpotTotal (spot)}
       
       </Text>
     </Col>
-  )
+  );
 }
 
 const pointsToSelectRow = [];
@@ -102,18 +103,16 @@ for(let diceButton = 0; diceButton < MAX_SPOT; diceButton++) {
         key={"buttonsrow"+ diceButton}
         size={35}
         color={getDicePointsColor(diceButton)}
-        // pressable here
         >
 
         </MaterialCommunityIcons>
       </Pressable>
     </Col>
-  )
+  );
 }
 
   function getDicePointsColor(i) {
-    return(selectedDicePoints[i] && !gameEndStatus) 
-    ? "black" : "steelblue";
+    return selectedDicePoints[i] ? "black" : "steelblue";
   }
 
   const selectDice = (i) => {
@@ -133,66 +132,100 @@ function getDiceColor(i) {
 
 const throwDices = () => {
 
-  // 2.osa
-  if (nbrOfThrowsLeft === 0 && !gameEndStatus) {
-    setStatus('Select your points before next throw');
-    return 1;
+  if (nbrOfThrowsLeft === 0) {
+
+    setStatus('Select your points before the next throw');
+    return;
   }
-  else if (nbrOfThrowsLeft === 0 && gameEndStatus) {
-    setGameEndStatus(false);
-    diceSpots.fill(0);
-    dicePointsTotal.fill(0);
-  } 
-  // ------------------ 1. osa
+
   let spots = [...diceSpots];
   for (let i = 0; i < NBR_OF_DICES; i++) {
     if (!selectedDices[i]) {
-      let randomNumber = Math.floor(Math.random() * 6 + 1);
+      let randomNumber = Math.floor(Math.random() * MAX_SPOT + 1);
       board[i] = 'dice-' + randomNumber;
       spots[i] = randomNumber;
     }
   }
   setNbrOfThrowsLeft(nbrOfThrowsLeft-1);
   setDiceSpots(spots);
-  setStatus('Select and throw dices again.');
 }
 
-  const selectDicePoints = (i) => {
-    // very first version
-    let selectedPoints = [...selectDicePoints];
-    let points = [...dicePointsTotal];
+const selectDicePoints = (i) => {
+//very first version
+if (nbrOfThrowsLeft === 0) {
+  let selected = [...selectedDices];
+  let selectedPoints = [...selectedDicePoints];
+  let points = [...dicePointsTotal];
+  if(!selectedPoints[i]) {
+    setSelectedDices(new Array(NBR_OF_DICES).fill(false));
     selectedPoints[i] = true;
-    let nbrOfDices = diceSpots.reduce((total, x) => (x === (i + 1) ? total + 1 : total), 0);
-    points[i] = nbrOfDices * (i + 1);
+    let nbrOfDices = 
+      diceSpots.reduce
+      ((total, x) => (x === (i+1) ? total + 1 : total), 0);
+    points[i] = nbrOfDices * (i+1);
     setDicePointsTotal(points);
     setSelectedDicePoints(selectedPoints);
+    setNbrOfThrowsLeft(NBR_OF_THROWS);
     return points[i];
   }
+  else {
+    setStatus('You already selected points for ' + (i+1));
+  }
+}
+else {
+  setStatus('Throw ' + NBR_OF_THROWS + ' times before setting points.')
+}
+}
+
+function getSpotTotal(i) {
+return dicePointsTotal[i];
+}
+
+const allPointsSelected = () => {
+return selectedDicePoints.every((point) => point);
+};
 
 
-    return (
-        <>
-        <Header/>
-        <View>
-            <Text>
-                Gameboard will be here...
-            </Text>
-        <Container fluid>
+const resetGame = () => {
+setNbrOfThrowsLeft(NBR_OF_THROWS);
+setStatus('Throw dices');
+setGameEndStatus(false);
+setSelectedDices(new Array(NBR_OF_DICES).fill(false));
+setDiceSpots(new Array(NBR_OF_DICES).fill(0));
+setSelectedDicePoints(new Array(MAX_SPOT).fill(false));
+setDicePointsTotal(new Array(MAX_SPOT).fill(0));
+};
+
+return (
+<>
+    <Header/>
+    <View>
+        <Container>
             <Row>{dicesRow}</Row>
         </Container>
-        <Container fluid>
+        <Text style={style.text}>
+          Throws left: {nbrOfThrowsLeft}
+        </Text>
+        <Text style={style.text}>{status}</Text>
+        <Pressable
+            onPress={() => throwDices()} style={style.button}>
+            <Text style={style.text}>THROW DICES</Text>
+        </Pressable>
+        <Container>
             <Row>{pointsRow}</Row>
         </Container>
-        <Container fluid>
+        <Container>
             <Row>{pointsToSelectRow}</Row>
         </Container>
-        <Pressable 
-        onPress={() => throwDices()}>
-            <Text>THROW DICES</Text>
-        </Pressable>
-        <Text>Player: {playerName}</Text>
-        </View>
-        <Footer />
-        </>
-    )
+        <Text style={style.text}>Player: {playerName}</Text>
+        <Text style={style.text}>Total Points: {dicePointsTotal.reduce((total, points) => total + points, 0)}</Text>
+        {allPointsSelected() && (
+          <Pressable onPress={resetGame}>
+            <Text style={style.button}>Start Again</Text>
+          </Pressable>
+        )}
+    </View>
+    <Footer/>
+  </>
+)
 }

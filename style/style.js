@@ -53,16 +53,23 @@ export default StyleSheet.create({
   },
   button: {
     margin: 30,
+    marginHorizontal: 125, 
     flexDirection: "row",
     padding: 10,
     backgroundColor: "#73CED6",
     width: 150,
-    borderRadius: 15,
+    borderRadius: 10,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    textAlign: 'center'
   },
   buttonText: {
     color:"#2B2B52",
     fontSize: 20
-  }
+  },
+  text: {
+    textAlign: 'center',
+  },
+
+
 });

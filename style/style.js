@@ -1,19 +1,20 @@
 import { StyleSheet } from 'react-native';
 
+
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: '#f3defa'
   },
   header: {
     marginTop: 30,
     marginBottom: 15,
-    backgroundColor: 'skyblue',
+    backgroundColor: '#e9b3fc',
     flexDirection: 'row',
   },
   footer: {
     marginTop: 20,
-    backgroundColor: 'skyblue',
+    backgroundColor: '#e9b3fc',
     flexDirection: 'row'
   },
   title: {
@@ -37,8 +38,17 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
+  gameinfoheader: {
+    fontWeight:'bold',
+    backgroundColor: '#f5edf7',
+    textAlign: 'center',
+    justifyContent: 'center',
+    fontSize: 20,
+    marginTop: 10
+  },
   gameinfo: {
-    backgroundColor: '#fff',
+    
+    backgroundColor: '#f5edf7',
     textAlign: 'center',
     justifyContent: 'center',
     fontSize: 20,
@@ -52,11 +62,12 @@ export default StyleSheet.create({
     flexDirection: "row"
   },
   button: {
+    fontWeight:'bold',
     margin: 30,
     marginHorizontal: 125, 
     flexDirection: "row",
     padding: 10,
-    backgroundColor: "#73CED6",
+    backgroundColor: "#cf8ee6",
     width: 150,
     borderRadius: 10,
     justifyContent: 'center',
@@ -64,11 +75,13 @@ export default StyleSheet.create({
     textAlign: 'center'
   },
   buttonText: {
+    
     color:"#2B2B52",
     fontSize: 20
   },
   text: {
     textAlign: 'center',
+    fontWeight:'bold',
   },
 
 

@@ -127,7 +127,7 @@ for(let diceButton = 0; diceButton < MAX_SPOT; diceButton++) {
 }
 
 function getDiceColor(i) {
-  return selectedDices[i] ? "black" : "steelblue";
+  return selectedDices[i] ? "#741f8c" : "#e9b3fc";
 }
 
 const throwDices = () => {

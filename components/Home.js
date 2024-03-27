@@ -42,7 +42,7 @@ export default Home = ({navigation}) => {
             
             :
             <>
-                <Text style={style.gameinfo}>Rules of the game</Text>
+                <Text style={style.gameinfoheader}>Rules of the game</Text>
                 <Text multiline='true' style={style.gameinfo}>
                 THE GAME: You have {NBR_OF_DICES} dices and 
                 for the every dice you have {NBR_OF_THROWS} throws. After each throw you can keep dices in 
